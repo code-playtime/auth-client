@@ -14,13 +14,29 @@ router.get('/',(req,res) => {
 
 router.get('/login',(req,res)=>{
     const redirectUrl=
-        `${process.env.AUTH_URL}/login`+
-        `?client_id=test123`+
-        `&redirect_uri=http://localhost:3000/callback`
+        `${process.env.AUTH_URL}/app-auth`+
+        `?client_id=${process.env.CLIENT_ID}`+
+        `&redirect_uri=http://localhost:3000/auth-webhook`
 
     res.redirect(
         redirectUrl
     )
+})
+
+router.get('/register',(req,res)=>{
+    const redirectUrl=
+        `${process.env.AUTH_URL}/app-auth`+
+        `?client_id=${process.env.CLIENT_ID}`+
+        `&redirect_uri=http://localhost:3000/auth-webhook`+
+        `&dest=register`
+
+    res.redirect(
+        redirectUrl
+    )
+})
+
+router.get("/auth-webhook", (req, res) => {
+    res.send(`<h1>Welcome to home</h1>`);
 })
 
 router.get('/dashboard',auth,(req,res) => {
