@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const jwt = require('jsonwebtoken');
 
 const auth = require('../middleware/auth')
 
@@ -62,8 +63,6 @@ router.get("/auth-webhook", async (req, res) => {
                 .send('Authentication failed')
         }
 
-        console.log(response.body);
-
         const data = await response.json()
         const accessToken = data.data.access_token
 
@@ -74,11 +73,12 @@ router.get("/auth-webhook", async (req, res) => {
         }
 
         const decoded = jwt.decode(accessToken)
+        const user = decoded.data;
 
         req.session.user = {
-            id: decoded.id,
-            name: decoded.name,
-            email: decoded.email
+            id: user.id,
+            name: user.name,
+            email: user.email
         }
 
         req.session.accessToken = accessToken;
